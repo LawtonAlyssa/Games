@@ -13,13 +13,40 @@ def draw_grid(g, tile_size, rows, columns, margin=1, **kwargs):
         for x in range(columns):
             pg.draw.rect(g,purple,(x*tile_size,y*tile_size,tile_size-margin,tile_size-margin))
 
+def find_adjacent_bombs(row, col, bombs_present, rows, columns):
+    num_bombs_present = 0
+    for y in range(row-1,row+2):
+        for x in range(col-1,col+2):
+            if x>=0 and x<columns and y>=0 and y<rows and bombs_present[y][x] is True: # handles edges
+                num_bombs_present += 1
+    return num_bombs_present
+
+def fill_num_bombs(bombs_present, rows, columns):
+    for y in range(rows):
+        for x in range(columns):
+            if bombs_present[y][x] is False:
+                bombs_present[y][x] = find_adjacent_bombs(y, x, bombs_present, rows, columns)
+
+def fill_bombs_present(rows, columns, bombs):
+    bombs_present = [[False for y in range(rows)] for x in range(columns)]
+
+    bombs_placed = 0
+
+    while bombs_placed < bombs:
+        bomb_row = randrange(0,rows)
+        bomb_col = randrange(0,columns)
+        if not bombs_present[bomb_row][bomb_col]: 
+            bombs_present[bomb_row][bomb_col] = True
+            bombs_placed += 1
+    
+    fill_num_bombs(bombs_present, rows, columns)
+
+    return bombs_present
 
 def main():
     setup()
     clock = pg.time.Clock()
     
-    
-
     mode = Difficulty.hard
 
     if(mode==Difficulty.easy):
@@ -42,17 +69,8 @@ def main():
         pg.quit()
         return
 
-    bomb_present = [[False for y in range(rows)] for x in range(columns)]
+    bombs_present = fill_bombs_present(rows, columns, bombs)
 
-    bombs_placed = 0
-
-    while bombs_placed < bombs:
-        bomb_row = randrange(0,rows)
-        bomb_col = randrange(0,columns)
-        if not bomb_present[bomb_row][bomb_col]: 
-            bomb_present[bomb_row][bomb_col] = True
-            bombs_placed += 1
-    
     width, height = columns*tile_size, rows*tile_size
     g = pg.display.set_mode((width, height))
 
