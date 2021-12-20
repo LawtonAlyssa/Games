@@ -6,24 +6,24 @@ purple = (85,11,202)
 def setup():
     pg.init()
     
-def draw_grid(g, tile_size, rows, columns, **kwargs):
+def draw_grid(g, tile_size, rows, columns, margin=1, **kwargs):
     for y in range(rows):
         for x in range(columns):
-            pg.draw.rect(g,purple,(x*tile_size,y*tile_size,tile_size,tile_size))
+            pg.draw.rect(g,purple,(x*tile_size,y*tile_size,tile_size-margin,tile_size-margin))
 
 
 def main():
     setup()
     clock = pg.time.Clock()
     
-    width, height = 640, 640
-    g = pg.display.set_mode((width, height))
-    
     tile_size = 64
     
-    rows = 10
-    columns = 10
+    rows = 2
+    columns = 16
     
+    width, height = columns*tile_size, rows*tile_size
+    g = pg.display.set_mode((width, height))
+
     while True:
         g.fill((0, 0, 0))
         
