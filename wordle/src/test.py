@@ -21,8 +21,8 @@ def positiveWordFiltrationTest():
     testCount = 2
 
     correct = 0
-    correct += runTest("pos1", positiveListFiltration, ["abc"], letter_loc=[0,1,2], word_solution="abc", words_list=["abc", "def"])
-    correct += runTest("pos2", positiveListFiltration, ["abc", "dec"], letter_loc=[2], word_solution="abc", words_list=["abc", "def", "dec"])
+    correct += runTest("pos1", positiveListFiltration, ["abc"], letter_locs=[0,1,2], word_solution="abc", words_list=["abc", "def"])
+    correct += runTest("pos2", positiveListFiltration, ["abc", "dec"], letter_locs=[2], word_solution="abc", words_list=["abc", "def", "dec"])
     print("Total:", round(100 * correct / testCount, 2), "%")
 
 def main():
