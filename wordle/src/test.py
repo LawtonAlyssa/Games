@@ -9,14 +9,21 @@ def runTest(name, func, sol, *args, **kwargs):
         attempt = func(*args, **kwargs)
     except:
         crashed = True
+        attempt = None
         traceback.print_exc()
     elapsedTime = time() - startTime
-    print("{}: {} ({}s)".format(name, "CRASH" if crashed else ("PASS" if attempt == sol else "Fail"), round(elapsedTime, 3)))
+    passTest = attempt == sol
+    print("{}: {} ({}s)".format(name, "CRASH" if crashed else ("PASS" if passTest else "Fail"), round(elapsedTime, 3)))
     print("\n------------------------------------------------------")
+    return 1 if passTest else 0
 
 def positiveWordFiltrationTest():
-    runTest("pos1", positiveListFiltration, ["abc"], letter_loc=[0,1,2], word_solution="abc", words_list=["abc", "def"])
-    runTest("pos2", positiveListFiltration, ["abc", "dec"], letter_loc=[2], word_solution="abc", words_list=["abc", "def", "dec"])
+    testCount = 2
+
+    correct = 0
+    correct += runTest("pos1", positiveListFiltration, ["abc"], letter_loc=[0,1,2], word_solution="abc", words_list=["abc", "def"])
+    correct += runTest("pos2", positiveListFiltration, ["abc", "dec"], letter_loc=[2], word_solution="abc", words_list=["abc", "def", "dec"])
+    print("Total:", round(100 * correct / testCount, 2), "%")
 
 def main():
     positiveWordFiltrationTest()
